@@ -1,7 +1,8 @@
 module.exports = function getZerosCount(number, base) {
   let index = 0;
   let power = [];
-  let res = 0;
+  let resMax = 0;
+  let resMin = 0;
 
   for (let p = 2; p <= base; ++p) {
     if (base % p === 0) {
@@ -11,18 +12,31 @@ module.exports = function getZerosCount(number, base) {
     }
   }
   const maxPower = Math.max.apply(null, power);
+  const minPower = Math.min.apply(null, power);
   const maxPowerQuantity = power.reduce((acc, el) => {
     if (el === maxPower) {
       acc++;
     }
     return acc;
   }, 0);
+  const minPowerQuantity = power.reduce((acc, el) => {
+    if (el === minPower) {
+      acc++;
+    }
+    return acc;
+  }, 0);
   index = maxPower;
   while (index <= number) {
-    res += Math.floor(number / index);
+    resMax += Math.floor(number / index);
     index *= maxPower;
   }
-  // console.log(maxPower);
-  // console.log(res);
-  return Math.floor(res / maxPowerQuantity);
+  index = minPower;
+  while (index <= number) {
+    resMin += Math.floor(number / index);
+    index *= minPower;
+  }
+  return Math.floor(resMax / maxPowerQuantity) <
+    Math.floor(resMin / minPowerQuantity)
+    ? Math.floor(resMax / maxPowerQuantity)
+    : Math.floor(resMin / minPowerQuantity);
 };
